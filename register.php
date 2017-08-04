@@ -1,6 +1,6 @@
 <?php
 include_once("classes/User.class.php");
-    
+
 if (!empty($_POST)) {
     $firstname = $_POST['firstname'];
     $lastname = $_POST['lastname'];
@@ -34,7 +34,7 @@ if (!empty($_POST)) {
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>TODO</title>
+    <title>Register</title>
     <link rel="stylesheet" href="css/reset.css">
 </head>
 <body>
