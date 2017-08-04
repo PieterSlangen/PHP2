@@ -4,49 +4,49 @@ include_once("includes/db.inc.php");
 
 class User
 {
-    private $m_sFirstname;
-    private $m_sLastname;
-    private $m_sEmail;
-    private $m_sPassword;
+    private $Firstname;
+    private $Lastname;
+    private $Email;
+    private $Password;
 
     public function getFirstname()
     {
-        return $this->m_sFirstname;
+        return $this->Firstname;
     }
 
-    public function setFirstname($m_sFirstname)
+    public function setFirstname($Firstname)
     {
-        $this->m_sFirstname = $m_sFirstname;
+        $this->Firstname = $Firstname;
     }
 
     public function getLastname()
     {
-        return $this->m_sLastname;
+        return $this->Lastname;
     }
 
-    public function setLastname($m_sLastname)
+    public function setLastname($Lastname)
     {
-        $this->m_sLastname = $m_sLastname;
+        $this->Lastname = $Lastname;
     }
 
     public function getEmail()
     {
-        return $this->m_sEmail;
+        return $this->Email;
     }
 
-    public function setEmail($m_sEmail)
+    public function setEmail($Email)
     {
-        $this->m_sEmail = $m_sEmail;
+        $this->Email = $Email;
     }
 
     public function getPassword()
     {
-        return $this->m_sPassword;
+        return $this->Password;
     }
 
-    public function setPassword($m_sPassword)
+    public function setPassword($Password)
     {
-        $this->m_sPassword = $m_sPassword;
+        $this->Password = $Password;
     }
 
     public function Register()

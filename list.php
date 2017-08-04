@@ -1,6 +1,18 @@
 <?php
 
 include_once("includes/no-session.inc.php");
+include_once("classes/Feature.class.php");
+
+if(!empty($_POST)){
+    $name = $_POST['name'];
+
+    $list = new Feature();
+    $list->setName($name);
+    $list->add();
+}
+
+$feed = new Feature();
+$feed->getList();
 
 ?><!doctype html>
 <html lang="en">
@@ -13,6 +25,21 @@ include_once("includes/no-session.inc.php");
     <link rel="stylesheet" href="css/reset.css">
 </head>
 <body>
+
+<?php include_once("includes/nav.inc.php"); ?>
+
+<h1>Lists</h1>
+
+<form action="" method="post">
+    <label for="name">Name</label>
+    <input type="text" name="name" id="name"><br>
+
+    <button type="submit">Save</button>
+</form>
+
+<?php foreach ($feed->getList() as $l): ?>
+    <a href="list.php"><?php echo htmlspecialchars($l["name"]); ?></a><br>
+<?php endforeach; ?>
 
 
 <!-- Latest compiled and minified JavaScript -->

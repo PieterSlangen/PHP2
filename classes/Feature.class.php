@@ -3,17 +3,30 @@ include_once("includes/db.inc.php");
 
 class Feature
 {
-    private $m_sName;
+    private $name;
 
-    public function getMSName()
+    public function getName()
     {
-        return $this->m_sName;
+        return $this->name;
     }
 
-    public function setMSName($m_sName)
+    public function setName($Name)
     {
-        $this->m_sName = $m_sName;
+        $this->name = $Name;
     }
 
-    
+    public function add(){
+        global $conn;
+        $statement = $conn->prepare("INSERT INTO List(name) VALUES (:name)");
+        $statement->bindValue(":name", $this->getName());
+        $statement->execute();
+    }
+
+    public function getList()
+    {
+        global $conn;
+        $statement = $conn->prepare("select * from List");
+        $statement->execute();
+        return $statement->fetchAll();
+    }
 }
