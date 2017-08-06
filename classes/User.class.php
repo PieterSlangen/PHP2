@@ -8,6 +8,7 @@ class User
     private $Lastname;
     private $Email;
     private $Password;
+    private $Admin;
 
     public function getFirstname()
     {
@@ -49,16 +50,27 @@ class User
         $this->Password = $Password;
     }
 
-    public function Register()
+    public function getAdmin()
+    {
+        return $this->Admin;
+    }
+
+    public function setAdmin($Admin)
+    {
+        $this->Admin = $Admin;
+    }
+
+    public function register()
     {
         global $conn;
 
-        $statement = $conn->prepare("INSERT INTO User(firstname, lastname, email, password) 
-                                       VALUES (:firstname, :lastname, :email, :password)");
+        $statement = $conn->prepare("INSERT INTO User(firstname, lastname, email, password, admin) 
+                                       VALUES (:firstname, :lastname, :email, :password, :admin)");
         $statement->bindValue(":firstname", $this->getFirstname());
         $statement->bindValue(":lastname", $this->getLastname());
         $statement->bindValue(":email", $this->getEmail());
         $statement->bindValue(":password", $this->getPassword());
+        $statement->bindValue(":admin", $this->getAdmin());
 
         $options = [
             'cost'=> 12
@@ -68,14 +80,23 @@ class User
         $statement->execute();
     }
 
-    public function Login()
+    public function delete()
+    {
+        global $conn;
+
+        $statement = $conn->prepare("DELETE FROM User where email = :email");
+        $statement->bindValue(":email", $this->getEmail());
+        $statement->execute();
+    }
+
+    public function login()
     {
         global $conn;
 
         $p_password = $this->getPassword();
 
         $statement = $conn->prepare("SELECT * FROM User where email = :email LIMIT 1");
-        $statement->execute(array( ":email"=>$this->getEmail() ));
+        $statement->execute(array( ":email"=>$this->getEmail()));
 
         if ($statement->rowCount() == 1) {
             $currentUser = $statement->fetch(PDO::FETCH_ASSOC);

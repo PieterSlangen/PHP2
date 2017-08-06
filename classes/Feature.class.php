@@ -15,7 +15,8 @@ class Feature
         $this->name = $Name;
     }
 
-    public function add(){
+    public function addList()
+    {
         global $conn;
         $statement = $conn->prepare("INSERT INTO List(name) VALUES (:name)");
         $statement->bindValue(":name", $this->getName());
@@ -28,5 +29,22 @@ class Feature
         $statement = $conn->prepare("select * from List");
         $statement->execute();
         return $statement->fetchAll();
+    }
+
+    public function addSubject()
+    {
+        global $conn;
+        $statement = $conn->prepare("INSERT INTO subject(name) VALUES (:name)");
+        $statement->bindValue(":name", $this->getName());
+        $statement->execute();
+    }
+
+    public function deleteSubject()
+    {
+        global $conn;
+
+        $statement = $conn->prepare("DELETE FROM subject where name = :name");
+        $statement->bindValue(":name", $this->getName());
+        $statement->execute();
     }
 }

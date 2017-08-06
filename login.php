@@ -10,13 +10,22 @@ if (!empty($_POST)) {
     $user = new User();
     $user->setEmail($email);
     $user->setPassword($password);
-    $user->Login();
+    $user->login();
 
-    if ($user->Login()) {
-        $_SESSION['email'] = $email;
-        header('Location: index.php');
+    if ($user->getAdmin() == "1") {
+        if ($user->login()) {
+            $_SESSION['email'] = $email;
+            header('Location: index.php');
+        } else {
+            $error = "Username or password is incorrect.";
+        }
     } else {
-        $error = "Username or password is incorrect.";
+        if ($user->login()) {
+            $_SESSION['email'] = $email;
+            header('Location: list.php');
+        } else {
+            $error = "Username or password is incorrect.";
+        }
     }
 }
 

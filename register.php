@@ -21,7 +21,8 @@ if (!empty($_POST)) {
         $user->setLastname($lastname);
         $user->setEmail($email);
         $user->setPassword($password);
-        $user->Register();
+        $user->setAdmin("0");
+        $user->register();
 
         header('Location: login.php');
     }
