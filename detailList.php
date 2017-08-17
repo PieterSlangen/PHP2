@@ -1,6 +1,12 @@
 <?php
 
 include_once("includes/no-session.inc.php");
+include_once("classes/Feature.class.php");
+
+$id = $_GET['listid'];
+$list = new Feature();
+
+$list->setList($id);
 
 ?><!doctype html>
 <html lang="en">
@@ -9,13 +15,21 @@ include_once("includes/no-session.inc.php");
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>TODO</title>
+    <title>List detail</title>
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
 </head>
 <body>
 
-<?php include_once("includes/navAdmin.inc.php"); ?><br>
+<?php include_once("includes/nav.inc.php"); ?><br>
+
+<?php foreach ($list->getListId() as $l): ?>
+    <div>
+        <p><?php echo htmlspecialchars($l['taskname']); ?></p>
+        <p><?php echo htmlspecialchars($l['deadline']); ?></p>
+        <p><?php echo htmlspecialchars($l["subjectname"]); ?></p>
+    </div>
+<?php endforeach; ?>
 
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

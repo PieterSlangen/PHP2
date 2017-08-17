@@ -3,26 +3,23 @@
 include_once("includes/no-session.inc.php");
 include_once("classes/Feature.class.php");
 
-try {
+
+try{
     $error="";
-
     if (!empty($_POST)) {
+        $name = $_POST['name'];
+        $deadline = $_POST['deadline'];
+        $subject = $_POST['subject'];
+        $list = $_POST['list'];
 
-        if (isset($_POST['save'])) {
-            $name = $_POST['name'];
-
-            $list = new Feature();
-            $list->setName($name);
-            $list->addList();
-        } elseif (isset($_POST['delete'])) {
-            $name2 = $_POST['list'];
-
-            $list = new Feature();
-            $list->setName($name2);
-            $list->deleteList();
-        }
+        $task = new Feature();
+        $task->setName($name);
+        $task->setDeadline($deadline);
+        $task->setSubject($subject);
+        $task->setList($list);
+        $task->addTask();
     }
-} catch (Exception $e) {
+}catch(Exception $e) {
     $error = $e->getMessage();
 }
 
@@ -35,43 +32,38 @@ $feed = new Feature();
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>List</title>
-    <link rel="stylesheet" href="css/reset.css">
+    <title>Task</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/reset.css">
 </head>
 <body>
 
 <?php include_once("includes/nav.inc.php"); ?><br>
 
+<h1>Add task</h1>
+
 <p class="error"><?php echo htmlspecialchars($error) ?></p>
 
 <form action="" method="post">
-
-    <h1>Add list</h1>
-
     <label for="name">Name</label>
     <input type="text" name="name" id="name"><br>
 
-    <input type="submit" value="save" name="save"><br>
-
-    <h1>Delete list</h1>
-
-    <select name="list" id="list">
-        <?php foreach ($feed->getLists() as $l): ?>
-            <option value="<?php echo htmlspecialchars($l["name"]); ?>"><?php echo htmlspecialchars($l["name"]); ?></option>
+    <select name="subject" id="subject">
+        <?php foreach ($feed->getSubjects() as $s): ?>
+            <option value="<?php echo htmlspecialchars($s["id"]); ?>"><?php echo htmlspecialchars($s["name"]); ?></option>
         <?php endforeach; ?>
     </select><br>
 
-    <input type="submit" name="delete" value="delete">
+    <select name="list" id="list">
+        <?php foreach ($feed->getLists() as $l): ?>
+            <option value="<?php echo htmlspecialchars($l["id"]); ?>"><?php echo htmlspecialchars($l["name"]); ?></option>
+        <?php endforeach; ?>
+    </select><br>
 
+    <input type="date" name="deadline" id="deadline"><br>
+
+    <button type="submit">Save</button>
 </form>
-
-<?php foreach ($feed->getLists() as $l): ?>
-    <div>
-        <a href="detailList.php?listid=<?php echo htmlspecialchars($l['id'])?>"><?php echo htmlspecialchars($l["name"]); ?></a>
-    </div>
-<?php endforeach; ?>
-
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
