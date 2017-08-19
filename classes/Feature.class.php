@@ -7,6 +7,50 @@ class Feature
     private $deadline;
     private $subject;
     private $list;
+    private $comment;
+    private $userId;
+    private $taskId;
+    private $commentId;
+
+    public function getComment()
+    {
+        return $this->comment;
+    }
+
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
+    }
+
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
+    }
+
+    public function getTaskId()
+    {
+        return $this->taskId;
+    }
+
+    public function setTaskId($taskId)
+    {
+        $this->taskId = $taskId;
+    }
+
+    public function getCommentId()
+    {
+        return $this->commentId;
+    }
+
+    public function setCommentId($commentId)
+    {
+        $this->commentId = $commentId;
+    }
 
     public function getName()
     {
@@ -138,6 +182,14 @@ class Feature
         return $statement->fetchAll();
     }
 
+    public function getTasksId(){
+        global $conn;
+        $statement = $conn->prepare("select * from Task where id = :id");
+        $statement->bindValue(":id", $this->getTaskId());
+        $statement->execute();
+        return $statement->fetchAll();
+    }
+
     public function getTasks()
     {
         global $conn;
@@ -180,5 +232,22 @@ class Feature
         $statement->bindValue(":name", $this->getName());
         $statement->bindValue(":id", $this->getSubject());
         $statement->execute();
+    }
+
+    public function uploadComment(){
+        global $conn;
+        $statement = $conn->prepare("insert into comment (comment, taskID, userID) values (:comment, :taskID, :userID)");
+        $statement->bindValue(":comment", $this->getComment());
+        $statement->bindValue(":taskID", $this->getTaskId());
+        $statement->bindValue(":userID", $this->getUserId());
+        $statement->execute();
+    }
+
+    public function showComments(){
+        global $conn;
+        $statement = $conn->prepare("select c.*, c.id as commentID, u.email as userEmail from comment c inner join User u where u.id = c.userID and c.taskID = :taskID");
+        $statement->bindValue(":taskID", $this->getTaskId());
+        $statement->execute();
+        return $statement->fetchAll();
     }
 }
