@@ -1,6 +1,7 @@
 <?php
 
 include_once("includes/no-session.inc.php");
+include_once("includes/no-admin.inc.php");
 
 ?><!doctype html>
 <html lang="en">

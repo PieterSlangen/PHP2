@@ -10,25 +10,14 @@ try {
         $email = $_POST['email'];
         $password = $_POST['password'];
 
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen(trim($firstname)) === 0 || strlen(trim($lastname)) === 0 || strlen(trim($password)) === 0) {
-            $error = "Please fill in all fields.";
-            $errorBool = true;
-        } else {
-            $error = "";
-            $errorBool = false;
-        }
+        $user = new User();
+        $user->setFirstname($firstname);
+        $user->setLastname($lastname);
+        $user->setEmail($email);
+        $user->setPassword($password);
+        $user->register();
 
-        if ($errorBool == false) {
-            $user = new User();
-            $user->setFirstname($firstname);
-            $user->setLastname($lastname);
-            $user->setEmail($email);
-            $user->setPassword($password);
-            $user->setAdmin("0");
-            $user->register();
-
-            header('Location: login.php');
-        }
+        header('Location: login.php');
     }
 } catch (Exception $e) {
     $error = $e->getMessage();
@@ -44,44 +33,45 @@ try {
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Register</title>
-    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
 </head>
 <body>
 
-<div class="alert alert-warning"><?php echo htmlspecialchars($error) ?></div>
+<img class="logo" src="images/logo.png" alt="todo logo">
 
-<div>
-    <div>
-        <h3>Register</h3>
-    </div>
-    <div>
-        <form action="" method="post">
+<h1 class="header">Register</h1>
 
-            <div>
-                <?php
-                if (isset($errorBool)) {
-                    echo "<p class='error'>$error</p>";
-                }
-                ?>
-            </div>
+<div class="alert-warning"><?php if (isset($error)) {
+    echo htmlspecialchars($error);
+} ?></div>
 
+<div class="container">
+    <form action="" method="post">
+        <div class="form-group">
             <label for="firstname">Firstname</label>
-            <input type="text" name="firstname" id="firstname"> </br>
+            <input class="form-control" type="text" name="firstname" id="firstname">
+        </div>
 
+        <div class="form-group">
             <label for="lastname">Lastname</label>
-            <input type="text" name="lastname" id="lastname"></br>
+            <input class="form-control" type="text" name="lastname" id="lastname">
+        </div>
 
+        <div class="form-group">
             <label for="email">email</label>
-            <input type="text" name="email" id="email"></br>
+            <input class="form-control" type="text" name="email" id="email">
+        </div>
 
+        <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" name="password" id="password"></br>
+            <input class="form-control" type="password" name="password" id="password">
+        </div>
 
-            <button type="submit">Register</button>
-        </form>
-    </div>
+        <button class="btn btn-danger" type="submit">Register</button>
+    </form>
 </div>
+
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>

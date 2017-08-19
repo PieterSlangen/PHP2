@@ -16,20 +16,18 @@ try {
         $user->setPassword($password);
         $user->login();
 
-        if ($user->checkAdmin() == 0) {
-            if ($user->login()) {
-                $_SESSION['email'] = $email;
-                header('Location: index.php');
-            } else {
-                $error = "Username or password is incorrect.";
+        if ($user->login()) {
+            $_SESSION['email'] = $email;
+
+            foreach ($user->checkAdmin() as $u) {
+                if ($u['admin'] == 0) {
+                    header('location: index.php');
+                } else {
+                    header('location: indexAdmin.php');
+                }
             }
         } else {
-            if ($user->login()) {
-                $_SESSION['email'] = $email;
-                header('Location: indexAdmin.php');
-            } else {
-                $error = "Username or password is incorrect.";
-            }
+            $error = "Please fill in all fields.";
         }
     }
 } catch (Exception $e) {
@@ -44,32 +42,35 @@ try {
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Login</title>
-    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
 </head>
 <body>
 
-<h1>Login</h1>
+<img class="logo" src="images/logo.png" alt="todo logo">
 
-<div class="alert alert-warning"><?php echo htmlspecialchars($error) ?></div>
+<h1 class="header">Login</h1>
 
-<form action="" method="post">
-    <label for="email">email</label>
-    <input type="text" name="email" id="email">
+<div class="container">
+    <div class="alert-warning"><?php if (isset($error)) {
+    echo htmlspecialchars($error);
+} ?></div>
 
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password">
+    <form action="" method="post">
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input class="form-control" type="text" name="email" id="email">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input class="form-control" type="password" name="password" id="password">
+        </div>
+        <button type="submit" class="btn btn-danger">Login</button>
 
-    <button type="submit">Login</button>
+        <p>or <a class="text-danger" href="register.php">register</a> here!</p>
+    </form>
 
-    <p>or <a href="register.php">register</a> here!</p>
-
-    <?php
-    if (isset($error)) {
-        echo "<p class='error'>$error</p>";
-    }
-    ?>
-</form>
+</div>
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>

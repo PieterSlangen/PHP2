@@ -17,7 +17,7 @@ class User
 
     public function setFirstname($Firstname)
     {
-        if ($Firstname==""){
+        if ($Firstname=="") {
             throw new Exception('Firstname can not be empty');
         }
         $this->Firstname = $Firstname;
@@ -30,7 +30,7 @@ class User
 
     public function setLastname($Lastname)
     {
-        if ($Lastname==""){
+        if ($Lastname=="") {
             throw new Exception('Lastname can not be empty');
         }
         $this->Lastname = $Lastname;
@@ -43,7 +43,7 @@ class User
 
     public function setEmail($Email)
     {
-        if ($Email==""){
+        if ($Email=="") {
             throw new Exception('Email can not be empty');
         }
         $this->Email = $Email;
@@ -56,7 +56,7 @@ class User
 
     public function setPassword($Password)
     {
-        if ($Password==""){
+        if ($Password=="") {
             throw new Exception('Password can not be empty');
         }
         $this->Password = $Password;
@@ -69,7 +69,7 @@ class User
 
     public function setAdmin($Admin)
     {
-        if ($Admin==""){
+        if ($Admin=="") {
             throw new Exception('Admin can not be empty');
         }
         $this->Admin = $Admin;
@@ -79,13 +79,12 @@ class User
     {
         global $conn;
 
-        $statement = $conn->prepare("INSERT INTO User(firstname, lastname, email, password, admin) 
-                                       VALUES (:firstname, :lastname, :email, :password, :admin)");
+        $statement = $conn->prepare("INSERT INTO User(firstname, lastname, email, password) 
+                                       VALUES (:firstname, :lastname, :email, :password)");
         $statement->bindValue(":firstname", $this->getFirstname());
         $statement->bindValue(":lastname", $this->getLastname());
         $statement->bindValue(":email", $this->getEmail());
         $statement->bindValue(":password", $this->getPassword());
-        $statement->bindValue(":admin", $this->getAdmin());
 
         $options = [
             'cost'=> 12
@@ -132,16 +131,9 @@ class User
     {
         global $conn;
 
-        $statement = $conn->prepare("SELECT admin FROM User where name = :name");
-        $statement->bindValue(":name", $this->getAdmin());
+        $statement = $conn->prepare("SELECT admin FROM User where email = :email");
+        $statement->bindValue(":email", $_SESSION['email']);
         $statement->execute();
-
-        if(mysqli_num_rows($statement) == 0) {
-            return 0;
-        } else {
-            return 1;
-        }
-
-
+        return $statement;
     }
 }

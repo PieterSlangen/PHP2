@@ -2,6 +2,7 @@
 
 include_once("includes/no-session.inc.php");
 include_once("classes/Feature.class.php");
+include_once("includes/no-admin.inc.php");
 
 try {
     $error="";
@@ -40,30 +41,37 @@ $feed = new feature();
 
 <?php include_once("includes/navAdmin.inc.php"); ?>
 
-<p class="error"><?php echo htmlspecialchars($error) ?></p>
+<div class="container">
+    <p class="alert-warning"><?php if(isset($error)){echo htmlspecialchars($error);} ?></p>
 
-<form action="" method="post">
-    <h1>Add subject</h1>
+    <form action="" method="post">
+        <h1>Add subject</h1>
 
-    <label for="name">Name</label>
-    <input type="text" name="name" id="name"><br>
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input class="form-control" type="text" name="name" id="name">
+        </div>
 
-    <input type="submit" name="add" value="add">
+        <input class="btn btn-danger" type="submit" name="add" value="add">
+        <br>  <br>
+        <h1>Delete subject</h1>
 
-    <h1>Delete subject</h1>
+        <div class="form-group">
+            <label for="name2">Name</label>
+            <input class="form-control" type="text" name="name2" id="name2">
+        </div>
 
-    <label for="name2">Name</label>
-    <input type="text" name="name2" id="name2"><br>
+        <input class="btn btn-danger" type="submit" name="delete" value="delete">
+    </form>
+    <br>
+    <?php foreach ($feed->getSubjects() as $s): ?>
+        <div class="list-group-item">
+            <a class="text-danger" href="detailSubject.php?subjectid=<?php echo htmlspecialchars($s['id'])?>&subjectname=<?php echo htmlspecialchars($s['name'])?>"><?php echo htmlspecialchars($s["name"]); ?></a>
+        </div>
+    <?php endforeach; ?>
+</div>
 
-    <input type="submit" name="delete" value="delete">
-</form>
 
-
-<?php foreach ($feed->getSubjects() as $s): ?>
-    <div>
-        <a href="detailSubject.php?subjectid=<?php echo htmlspecialchars($s['id'])?>"><?php echo htmlspecialchars($s["name"]); ?></a>
-    </div>
-<?php endforeach; ?>
 
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

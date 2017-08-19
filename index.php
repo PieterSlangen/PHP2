@@ -13,20 +13,20 @@ $feed = new Feature();
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>TODO APP</title>
-    <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
 </head>
 <body>
 
 <?php include_once("includes/nav.inc.php"); ?><br>
 
-<?php foreach ($feed->getTasks() as $f): ?>
-    <div>
-        <p><?php echo htmlspecialchars($f['name']) ?></p>
-        <p><?php echo htmlspecialchars($f['deadline']) ?></p>
-    </div>
-<?php endforeach; ?>
-
+<div class="container">
+    <?php foreach ($feed->getTasks() as $f): ?>
+        <div class="list-group-item">
+            <p><?php echo htmlspecialchars($f['name']) ?></p>
+            <p class="badge badge-danger"><?php echo htmlspecialchars($feed->checkDeadline($f['deadline'])) ?></p>
+        </div>
+    <?php endforeach; ?>
+</div>
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>

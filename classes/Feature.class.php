@@ -15,7 +15,7 @@ class Feature
 
     public function setName($name)
     {
-        if ($name==""){
+        if ($name=="") {
             throw new Exception('Name can not be empty');
         }
         $this->name = $name;
@@ -28,7 +28,7 @@ class Feature
 
     public function setDeadline($deadline)
     {
-        if ($deadline==""){
+        if ($deadline=="") {
             throw new Exception('Deadline can not be empty');
         }
         $this->deadline = $deadline;
@@ -41,7 +41,7 @@ class Feature
 
     public function setSubject($subject)
     {
-        if ($subject==""){
+        if ($subject=="") {
             throw new Exception('Subject can not be empty');
         }
         $this->subject = $subject;
@@ -54,7 +54,7 @@ class Feature
 
     public function setList($list)
     {
-        if ($list==""){
+        if ($list=="") {
             throw new Exception('List can not be empty');
         }
         $this->list = $list;
@@ -108,6 +108,7 @@ class Feature
         return $statement->fetchAll();
     }
 
+
     public function addTask()
     {
         global $conn;
@@ -119,7 +120,8 @@ class Feature
         $statement->execute();
     }
 
-    public function getListId(){
+    public function getListId()
+    {
         global $conn;
         $statement = $conn->prepare("SELECT s.name as subjectname, t.name as taskname, t.deadline as deadline FROM subject s INNER JOIN Task t on t.subjectID = s.id  inner join list l on l.id = t.listID WHERE l.id = :id");
         $statement->bindValue(":id", $this->getList());
@@ -127,7 +129,8 @@ class Feature
         return $statement->fetchAll();
     }
 
-    public function getSubjectId(){
+    public function getSubjectId()
+    {
         global $conn;
         $statement = $conn->prepare("SELECT l.name as listname, t.name as taskname, t.deadline as deadline FROM list l INNER JOIN Task t on t.listID = l.id  inner join subject s on s.id = t.subjectID WHERE s.id = :id");
         $statement->bindValue(":id", $this->getSubject());
@@ -135,11 +138,47 @@ class Feature
         return $statement->fetchAll();
     }
 
-    public function getTasks(){
+    public function getTasks()
+    {
         global $conn;
         $statement = $conn->prepare("select * from Task ORDER BY deadline ASC");
         $statement->execute();
         return $statement->fetchAll();
     }
 
+    public function checkDeadline($date)
+    {
+        $currentDate = strtotime(date("Y-m-d H:i:s"));
+        $savedDate = strtotime($date);
+        $diff = $savedDate-$currentDate;
+        if ($diff>0 and $diff<604800) {
+            $r = floor($diff/86400);
+            if ($r==1) {
+                $r = $r." dag resterend.";
+            } else {
+                $r = $r." dagen resterend.";
+            }
+        } elseif ($diff>604800 and $diff<31449600) {
+            $r = floor($diff/604800);
+            if ($r==1) {
+                $r = $r." week resterend.";
+            } else {
+                $r = $r." weken resterend.";
+            }
+        } elseif ($diff>31449600) {
+            $r = floor($diff/31449600)." jaar resterend.";
+        } else {
+            $r = "Deadline voorbij.";
+        }
+        return $r;
+    }
+
+    public function updateSubject()
+    {
+        global $conn;
+        $statement =$conn->prepare("UPDATE subject SET name = :name WHERE id = :id");
+        $statement->bindValue(":name", $this->getName());
+        $statement->bindValue(":id", $this->getSubject());
+        $statement->execute();
+    }
 }
