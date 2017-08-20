@@ -20,7 +20,7 @@ $feed = new Feature();
 <?php include_once("includes/nav.inc.php"); ?><br>
 
 <div class="container">
-    <?php foreach ($feed->getTasks() as $f): ?>
+    <?php foreach ($feed->getTaskAll() as $f): ?>
         <div class="list-group-item">
             <a class="text-dark" href="detailTask.php?taskid=<?php echo htmlspecialchars($f['id'])?>"><?php echo htmlspecialchars($f["name"]); ?></a>
             <p class="badge badge-danger"><?php echo htmlspecialchars($feed->checkDeadline($f['deadline'])) ?></p>

@@ -79,12 +79,13 @@ class User
     {
         global $conn;
 
-        $statement = $conn->prepare("INSERT INTO User(firstname, lastname, email, password) 
-                                       VALUES (:firstname, :lastname, :email, :password)");
+        $statement = $conn->prepare("INSERT INTO User(firstname, lastname, email, password, admin) 
+                                       VALUES (:firstname, :lastname, :email, :password, :admin)");
         $statement->bindValue(":firstname", $this->getFirstname());
         $statement->bindValue(":lastname", $this->getLastname());
         $statement->bindValue(":email", $this->getEmail());
         $statement->bindValue(":password", $this->getPassword());
+        $statement->bindValue(":admin", $this->getAdmin());
 
         $options = [
             'cost'=> 12

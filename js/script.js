@@ -1,33 +1,52 @@
- alert('ok');
+$("#Add").click("submit", function(e){
+    var comment = $("#comment").val();
+    var taskID = $("#taskID").val();
+    var userID = $("#userID").val();
+    var userEmail = $("#userEmail").val();
 
-    /*$('#comment-form').submit(function () {
-        //var taskID = $(this).find('#taskId').val();
-        var comment = $(this).find('#comment').val();
-        var lijst = $(this).find().sibling('.comment-list');
-        event.preventDefault();
-        //console.log(taskID);*/
+    $.ajax({
+        type:"POST",
+        url:"comment.php",
+        data:{comment: comment, taskID: taskID, userID: userID},
+        success: function(response){
+            if(comment == ""){
+                var error = $("<div></div>");
+                error.html("<p class='alert-warning'>Please fill in all fields</p>");
 
-        $.ajax({
-            type:"POST",
-            url:"ajax/comment.php",
-            data:{data:value},
-            succes: function(response){
+                $("#error").prepend(error);
+            }else{
+                /*alert(comment);
+                 alert(taskID);
+                 alert(userID);
+                 alert(response);*/
+                var div = $("<div></div>");
+                div.html("<p class='text-danger'>" + userEmail + "</p><p>" + comment + "</p><hr>");
 
+                $("#comment-box").prepend(div);
+                $("#comment").val("").focus();
             }
-            });
-    //})
-
-/*
-
-$("#add").click("submit", function(e){
-    $.post('../ajax/comment.php', $(this).serialize(), function(e){
-
-        var comment = $("<div class='comment_email'>");
-        var email = '<?php echo htmlspecialchars($email) ?>';
-        comment.html('<div><p>' + email + '</p><p>' + $('#comment').val() + '</p></div>');
-
-        $('#comment_box').prepend(comment);
-        $('#comments').val('');
+        }
     });
     e.preventDefault();
-});*/
+});
+
+$("#todo").click("submit", function(e){
+    var todo = $("#todo").val();
+    var taskID = $("#taskID").val();
+
+    $.ajax({
+        type:'POST',
+        url:'todo.php',
+        data:{todo: todo, taskID: taskID},
+        success: function(response){
+            if($("#todo").val() == 0){
+                $("#todo").val(1);
+            }else{
+                $("#todo").val(0);
+            }
+            /*alert(todo);
+             alert(taskID);
+             alert(response);*/
+        }
+    });
+});

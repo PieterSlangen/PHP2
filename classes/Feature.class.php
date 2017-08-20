@@ -11,6 +11,17 @@ class Feature
     private $userId;
     private $taskId;
     private $commentId;
+    private $todo;
+
+    public function getTodo()
+    {
+        return $this->todo;
+    }
+
+    public function setTodo($todo)
+    {
+        $this->todo = $todo;
+    }
 
     public function getComment()
     {
@@ -19,6 +30,9 @@ class Feature
 
     public function setComment($comment)
     {
+        if ($comment=="") {
+            throw new Exception('Comment can not be empty');
+        }
         $this->comment = $comment;
     }
 
@@ -59,7 +73,7 @@ class Feature
 
     public function setName($name)
     {
-        if ($name=="") {
+        if($name=="") {
             throw new Exception('Name can not be empty');
         }
         $this->name = $name;
@@ -72,7 +86,7 @@ class Feature
 
     public function setDeadline($deadline)
     {
-        if ($deadline=="") {
+        if($deadline=="") {
             throw new Exception('Deadline can not be empty');
         }
         $this->deadline = $deadline;
@@ -85,9 +99,6 @@ class Feature
 
     public function setSubject($subject)
     {
-        if ($subject=="") {
-            throw new Exception('Subject can not be empty');
-        }
         $this->subject = $subject;
     }
 
@@ -98,9 +109,6 @@ class Feature
 
     public function setList($list)
     {
-        if ($list=="") {
-            throw new Exception('List can not be empty');
-        }
         $this->list = $list;
     }
 
@@ -182,7 +190,17 @@ class Feature
         return $statement->fetchAll();
     }
 
-    public function getTasksId(){
+    public function getSubjectName()
+    {
+        global $conn;
+        $statement = $conn->prepare("select name from Subject where id = :id");
+        $statement->bindValue(":id", $this->getSubject());
+        $statement->execute();
+        return $statement->fetchColumn();
+    }
+
+    public function getTasksId()
+    {
         global $conn;
         $statement = $conn->prepare("select * from Task where id = :id");
         $statement->bindValue(":id", $this->getTaskId());
@@ -190,7 +208,7 @@ class Feature
         return $statement->fetchAll();
     }
 
-    public function getTasks()
+    public function getTaskAll()
     {
         global $conn;
         $statement = $conn->prepare("select * from Task ORDER BY deadline ASC");
@@ -234,7 +252,8 @@ class Feature
         $statement->execute();
     }
 
-    public function uploadComment(){
+    public function uploadComment()
+    {
         global $conn;
         $statement = $conn->prepare("insert into comment (comment, taskID, userID) values (:comment, :taskID, :userID)");
         $statement->bindValue(":comment", $this->getComment());
@@ -243,11 +262,21 @@ class Feature
         $statement->execute();
     }
 
-    public function showComments(){
+    public function showComments()
+    {
         global $conn;
-        $statement = $conn->prepare("select c.*, c.id as commentID, u.email as userEmail from comment c inner join User u where u.id = c.userID and c.taskID = :taskID");
+        $statement = $conn->prepare("select c.*, c.id as commentID, u.email as userEmail from comment c inner join User u where u.id = c.userID and c.taskID = :taskID ORDER BY c.id DESC");
         $statement->bindValue(":taskID", $this->getTaskId());
         $statement->execute();
         return $statement->fetchAll();
+    }
+
+    public function updateTodo()
+    {
+        global $conn;
+        $statement = $conn->prepare("UPDATE Task SET todo= :todo WHERE id = :id");
+        $statement->bindValue(":todo", $this->getTodo());
+        $statement->bindValue(":id", $this->getTaskId());
+        $statement->execute();
     }
 }

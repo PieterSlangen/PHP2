@@ -42,7 +42,9 @@ $feed = new feature();
 <?php include_once("includes/navAdmin.inc.php"); ?>
 
 <div class="container">
-    <p class="alert-warning"><?php if(isset($error)){echo htmlspecialchars($error);} ?></p>
+    <p class="alert-warning"><?php if (isset($error)) {
+    echo htmlspecialchars($error);
+} ?></p>
 
     <form action="" method="post">
         <h1>Add subject</h1>
@@ -66,7 +68,7 @@ $feed = new feature();
     <br>
     <?php foreach ($feed->getSubjects() as $s): ?>
         <div class="list-group-item">
-            <a class="text-danger" href="detailSubject.php?subjectid=<?php echo htmlspecialchars($s['id'])?>&subjectname=<?php echo htmlspecialchars($s['name'])?>"><?php echo htmlspecialchars($s["name"]); ?></a>
+            <a class="text-danger" href="detailSubject.php?subjectid=<?php echo htmlspecialchars($s['id'])?>"><?php echo htmlspecialchars($s["name"]); ?></a>
         </div>
     <?php endforeach; ?>
 </div>

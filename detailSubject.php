@@ -3,14 +3,18 @@
 include_once("includes/no-session.inc.php");
 include_once("classes/Feature.class.php");
 
-if (!empty($_POST)) {
-    $name = $_POST['name'];
-    $id = $_GET['subjectid'];
-    $subject = new Feature();
+try {
+    if (!empty($_POST)) {
+        $name = $_POST['name'];
+        $id = $_GET['subjectid'];
+        $subject = new Feature();
 
-    $subject->setName($name);
-    $subject->setSubject($id);
-    $subject->updateSubject();
+        $subject->setName($name);
+        $subject->setSubject($id);
+        $subject->updateSubject();
+    }
+} catch (Exception $e) {
+    $error = $e->getMessage();
 }
 
 $id = $_GET['subjectid'];
@@ -35,7 +39,7 @@ $subject->setSubject($id);
 
 <div class="container">
 
-    <h1><?php echo $_GET['subjectname']?></h1>
+    <h1><?php echo htmlspecialchars($subject->getSubjectName());?></h1>
 
     <?php foreach ($subject->getSubjectId() as $s): ?>
         <div class="list-group-item">
